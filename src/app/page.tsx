@@ -1,12 +1,12 @@
+
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import ProductCard from "@/components/ProductCard";
+import { products } from "@/data/products";
+
+
 export default function Home() {
-  const products = [
-    { id: 1, name: "Notebook Pro 15", category: "Eletrônicos", price: 3499, emoji: "💻" },
-    { id: 2, name: "Fone Bluetooth", category: "Áudio", price: 249, emoji: "🎧" },
-    { id: 3, name: "Smartwatch X", category: "Acessórios", price: 899, emoji: "⌚" },
-    { id: 4, name: "Câmera 4K", category: "Fotografia", price: 2199, emoji: "📷" },
-    { id: 5, name: "Teclado Mecânico", category: "Periféricos", price: 599, emoji: "⌨️" },
-    { id: 6, name: "Monitor UltraWide", category: "Eletrônicos", price: 1899, emoji: "🖥️" },
-  ];
+  
 
   const categories = [
     { name: "Eletrônicos", emoji: "💻", count: 48 },
@@ -17,6 +17,8 @@ export default function Home() {
 
   return (
     <>
+    <Navbar />
+
       {/* Hero */}
       <section className="bg-white">
         <div className="max-w-6xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
@@ -93,26 +95,16 @@ export default function Home() {
           <a href="#" className="text-sm text-emerald-600 hover:text-emerald-700">Ver todos →</a>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-          {products.map((product) => (
-            <div key={product.id} className="bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-emerald-200 hover:shadow-sm transition-all cursor-pointer group">
-              <div className="h-44 bg-gray-50 flex items-center justify-center text-6xl group-hover:bg-emerald-50 transition-colors">
-                {product.emoji}
-              </div>
-              <div className="p-4">
-                <p className="text-xs text-gray-400 mb-1">{product.category}</p>
-                <p className="font-medium text-gray-900 text-sm mb-3">{product.name}</p>
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-gray-900">
-                    R$ {product.price.toLocaleString("pt-BR")}
-                  </span>
-                  <button className="w-8 h-8 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg flex items-center justify-center text-lg transition-colors">
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+  {products.map((product) => (
+    <ProductCard
+      key={product.id}
+      name={product.name}
+      category={product.category}
+      price={product.price}
+      emoji={product.emoji}
+    />
+  ))}
+</div>
       </section>
 
       {/* Banner CTA */}
@@ -127,6 +119,8 @@ export default function Home() {
           </a>
         </div>
       </section>
+
+      <Footer />
     </>
   );
 }
