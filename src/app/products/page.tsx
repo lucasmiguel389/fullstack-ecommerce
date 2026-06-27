@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { products } from "@/data/products";
+import Link from "next/link";
+import { useCart } from "@/context/CartContext";
 
 export default function ProductsPage() {
   const categories = [
@@ -13,19 +15,21 @@ export default function ProductsPage() {
     "Periféricos",
   ];
 
-  const [selectedCategory, setSelectedCategory] = useState("Todos");
-  const [search, setSearch] = useState("");
+const [selectedCategory, setSelectedCategory] = useState("Todos");
+const [search, setSearch] = useState("");
+
+const { addToCart } = useCart();
 
   const filteredProducts = products.filter((product) => {
-  const matchesCategory =
-    selectedCategory === "Todos" ||
-    product.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === "Todos" ||
+      product.category === selectedCategory;
 
-  const matchesSearch =
-    product.name.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch =
+      product.name.toLowerCase().includes(search.toLowerCase());
 
-  return matchesCategory && matchesSearch;
-});
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-12">
@@ -54,22 +58,24 @@ export default function ProductsPage() {
         ))}
       </div>
 
+      {/* Busca */}
       <div className="mb-8">
-  <input
-    type="text"
-    placeholder="Buscar produto..."
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    className="w-full md:w-96 px-4 py-3 border border-gray-300 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-  />
-</div>
+        <input
+          type="text"
+          placeholder="Buscar produto..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full md:w-96 px-4 py-3 border border-gray-300 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        />
+      </div>
 
       {/* Produtos */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
-          <div
+          <Link
+            href={`/products/${product.id}`}
             key={product.id}
-            className="bg-white border rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition"
+            className="bg-white border rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition block"
           >
             <div className="text-5xl mb-3">
               {product.emoji}
@@ -87,10 +93,23 @@ export default function ProductsPage() {
               R$ {product.price.toLocaleString("pt-BR")}
             </p>
 
-            <button className="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition">
-              Adicionar ao Carrinho
-            </button>
-          </div>
+            <div className="flex flex-col gap-2 mt-4">
+  <button
+    onClick={(e) => {
+      e.preventDefault();
+      addToCart(product);
+      alert(`${product.name} adicionado ao carrinho!`);
+    }}
+    className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition"
+  >
+    Adicionar ao Carrinho
+  </button>
+
+  <span className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+    Ver Produto
+  </span>
+</div>
+          </Link>
         ))}
       </div>
     </main>
